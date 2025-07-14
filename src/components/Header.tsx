@@ -18,15 +18,17 @@ const Header: React.FC<HeaderProps> = (props) => {
 
     const [ resetIcon, setResetIcon ] = React.useState<ReactNode>(<InformationIcon />);
 
+    const onResetClicked = () => {
+        if (finished && onReset)
+            onReset();
+    }
+
     React.useEffect(() => {
         if (finished) {
             if (won) 
                 setResetIcon(<SmileIcon />);
             else
                 setResetIcon(<FrownIcon />);
-            
-            if (onReset)
-                onReset();
         } else {
             setResetIcon(<InformationIcon />);
         }
@@ -36,13 +38,15 @@ const Header: React.FC<HeaderProps> = (props) => {
         <div className="flex justify-between items-center bg-gray-300 gap-2 p-4 rounded m-1.5">
             <div><h3 className="text-black font-bold">{title}</h3></div>
             <div className={`
-                aspect-square 
-                rounded-full 
-                bg-black 
-                p-0.5
-                ${finished ? 'hover:bg-gray-600' : ''}
-                ${finished ? 'cursor-pointer' : ''}
-            `}>{resetIcon}</div>
+                    aspect-square 
+                    rounded-full 
+                    bg-black 
+                    p-0.5
+                    ${finished ? 'hover:bg-gray-600' : ''}
+                    ${finished ? 'cursor-pointer' : ''}
+                `}
+                onClick={onResetClicked}
+            >{resetIcon}</div>
             <div className="">
                 <h3 className="text-black font-bold">Bombs Found {bombsFound}/{totalBombs}</h3>
             </div>

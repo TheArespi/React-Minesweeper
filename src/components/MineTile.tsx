@@ -50,6 +50,11 @@ const MineTile: React.FC<MineTileProps> = (props) => {
         setOpened(open ?? false);
     }, [open])
 
+    React.useEffect(() => {
+        if (!disabled)
+            setFlagged(false);
+    }, [disabled])
+
     return (
         <div 
             className={`

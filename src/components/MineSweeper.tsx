@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type Dispatch, type SetStateAction } from 'react'
 import '../App.css'
 import MineTile from './MineTile'
 import React from 'react'
@@ -7,12 +7,15 @@ interface MineSweeperProps {
   width: number;
   height: number;
   bombNumber: number;
+  resetTrigger: boolean;
+  gameFinished: boolean;
   bombFound?: (bombsFound: number) => void;
   gameOver?: (win: boolean) => void;
+  setResetTrigger: Dispatch<SetStateAction<boolean>>;
 }
 
 const MineSweeper: React.FC<MineSweeperProps> = (props) => {
-  const { width, height, bombNumber, bombFound, gameOver } = props;
+  const { width, height, bombNumber, resetTrigger, bombFound, gameOver, setResetTrigger, gameFinished } = props;
 
   const [bombs, setBombs] = React.useState<number>(0);
   
@@ -24,7 +27,7 @@ const MineSweeper: React.FC<MineSweeperProps> = (props) => {
   ));
   const [bombLocation, setBombLocation] = useState<Set<string>>(new Set<string>());
   const [flagLocation, setFlagLocation] = useState<Set<string>>(new Set<string>());
-  const [finished, setFinished] = useState<boolean>(false);
+  const [finished, setFinished] = useState<boolean>(gameFinished);
 
   const isCoordValid = (x: number, y: number) => {
     if (x < 0 || y < 0)
@@ -146,6 +149,27 @@ const MineSweeper: React.FC<MineSweeperProps> = (props) => {
     //generate the bomb locations
     generateBoard();
   }, []);
+
+  React.useEffect(() => {
+    //generate the bomb locations
+    setFinished(gameFinished);
+  }, [gameFinished]);
+
+  React.useEffect(() => {
+    if (!resetTrigger)
+      return;
+
+    setBoard(Array.from({ length: height }, () =>
+      Array.from({ length: width }, () => 0)
+    ));
+    setTileOpened(Array.from({ length: 10 }, () =>
+      Array.from({ length: 10 }, () => false)
+    ));
+
+    generateBoard();
+
+    setResetTrigger(false);
+  }, [resetTrigger])
 
   return (
     <div className="bg-gray-300 grid grid-cols-10 gap-2 p-4 rounded m-1.5">

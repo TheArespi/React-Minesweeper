@@ -10,6 +10,8 @@ function App() {
   const [finished, setFinished] = React.useState<boolean>(false);
   const [won, setWon] = React.useState<boolean>(false);
 
+  const [resetTrigger, setResetTrigger] = React.useState<boolean>(false);
+
   const bombFound = (bomb: number) => {
     setBombsFound(bomb);
   }
@@ -26,10 +28,17 @@ function App() {
     }
   }
 
+  const onReset = () => {
+    setResetTrigger(true);
+    setBombsFound(0);
+    setFinished(false);
+    setWon(false);
+  }
+
   return (
     <>
-      <Header title="Minesweeper" finished={finished} won={won} bombsFound={bombsFound} totalBombs={bombNumber}/>
-      <MineSweeper width={10} height={10}bombNumber={bombNumber} bombFound={bombFound} gameOver={gameOver}/>
+      <Header title="Minesweeper" finished={finished} won={won} bombsFound={bombsFound} totalBombs={bombNumber} onReset={onReset}/>
+      <MineSweeper width={10} height={10} gameFinished={finished} resetTrigger={resetTrigger} bombNumber={bombNumber} bombFound={bombFound} gameOver={gameOver} setResetTrigger={setResetTrigger}/>
     </>
   )
 }
