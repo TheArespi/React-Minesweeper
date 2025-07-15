@@ -165,6 +165,7 @@ const MineSweeper: React.FC<MineSweeperProps> = (props) => {
     setTileOpened(Array.from({ length: 10 }, () =>
       Array.from({ length: 10 }, () => false)
     ));
+    setBombs(0);
 
     generateBoard();
 
