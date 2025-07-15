@@ -95,6 +95,17 @@ const MineSweeper: React.FC<MineSweeperProps> = (props) => {
       if (gameOver && win) {
         gameOver(true);
         setFinished(true);
+        
+        const newTileOpened = tileOpened;
+
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            if (!updatedFlagLocation.has(`${x},${y}`))
+                newTileOpened[y][x] = true;
+          }
+        }
+
+        setTileOpened(newTileOpened);
       }
     }
   }
